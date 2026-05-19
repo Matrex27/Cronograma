@@ -9,6 +9,15 @@ const emptyEvent = {
   location: "",
 };
 
+const isEndTimeBeforeStartTime = (date, startTime, endTime) => {
+  if (!date || !startTime || !endTime) return false;
+
+  const start = new Date(`${date}T${startTime}`);
+  const end = new Date(`${date}T${endTime}`);
+
+  return end <= start;
+};
+
 function EventForm({ initialData, defaultDate, onSubmit, onCancel, submitting }) {
   const initialValues = useMemo(() => {
     if (initialData) {
@@ -21,6 +30,7 @@ function EventForm({ initialData, defaultDate, onSubmit, onCancel, submitting })
   }, [initialData, defaultDate]);
 
   const [form, setForm] = useState(initialValues);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setForm(initialValues);
@@ -28,11 +38,18 @@ function EventForm({ initialData, defaultDate, onSubmit, onCancel, submitting })
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    setError("");
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (isEndTimeBeforeStartTime(form.event_date, form.start_time, form.end_time)) {
+      setError("La hora de fin debe ser posterior a la hora de inicio.");
+      return;
+    }
+
     onSubmit(form);
   };
 
@@ -58,6 +75,7 @@ function EventForm({ initialData, defaultDate, onSubmit, onCancel, submitting })
         <input className="input" type="time" name="start_time" value={form.start_time} onChange={handleChange} required />
         <input className="input" type="time" name="end_time" value={form.end_time} onChange={handleChange} required />
       </div>
+      {error ? <p className="rounded-lg bg-brand-red/10 px-3 py-2 text-sm text-brand-red">{error}</p> : null}
 
       <div className="flex flex-wrap justify-end gap-2">
         <button type="button" className="btn border border-slate-300 text-slate-700 hover:bg-slate-100" onClick={onCancel}>

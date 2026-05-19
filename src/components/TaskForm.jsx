@@ -6,9 +6,18 @@ const emptyTask = {
   task_date: "",
   start_time: "",
   end_time: "",
-  estimated_minutes: "",
   priority: "medium",
   status: "pending",
+};
+
+const calculateMinutes = (date, startTime, endTime) => {
+  if (!date || !startTime || !endTime) return 0;
+
+  const start = new Date(`${date}T${startTime}`);
+  const end = new Date(`${date}T${endTime}`);
+  const minutes = Math.round((end - start) / 60000);
+
+  return minutes > 0 ? minutes : 0;
 };
 
 function TaskForm({ initialData, defaultDate, onSubmit, onCancel, submitting }) {
@@ -17,13 +26,13 @@ function TaskForm({ initialData, defaultDate, onSubmit, onCancel, submitting }) 
       return {
         ...emptyTask,
         ...initialData,
-        estimated_minutes: initialData.estimated_minutes ?? "",
       };
     }
     return { ...emptyTask, task_date: defaultDate };
   }, [initialData, defaultDate]);
 
   const [form, setForm] = useState(initialValues);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setForm(initialValues);
@@ -31,14 +40,28 @@ function TaskForm({ initialData, defaultDate, onSubmit, onCancel, submitting }) 
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    setError("");
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  const estimatedMinutes = useMemo(
+    () => calculateMinutes(form.task_date, form.start_time, form.end_time),
+    [form.task_date, form.start_time, form.end_time]
+  );
+
+  const isEndBeforeStart = form.task_date && form.start_time && form.end_time && estimatedMinutes === 0;
+
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (isEndBeforeStart) {
+      setError("La hora de fin debe ser posterior a la hora de inicio.");
+      return;
+    }
+
     onSubmit({
       ...form,
-      estimated_minutes: form.estimated_minutes ? Number(form.estimated_minutes) : 0,
+      estimated_minutes: estimatedMinutes,
     });
   };
 
@@ -56,14 +79,17 @@ function TaskForm({ initialData, defaultDate, onSubmit, onCancel, submitting }) 
         value={form.description}
         onChange={handleChange}
       />
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div>
         <input className="input" type="date" name="task_date" value={form.task_date} onChange={handleChange} required />
-        <input className="input" type="number" min="0" name="estimated_minutes" placeholder="Minutos estimados" value={form.estimated_minutes} onChange={handleChange} />
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <input className="input" type="time" name="start_time" value={form.start_time} onChange={handleChange} required />
         <input className="input" type="time" name="end_time" value={form.end_time} onChange={handleChange} required />
       </div>
+      <div className="rounded-lg border border-brand-blue/20 bg-brand-blue/5 px-3 py-2 text-sm text-brand-blueDark">
+        Minutos estimados: <span className="font-semibold">{estimatedMinutes}</span>
+      </div>
+      {error ? <p className="rounded-lg bg-brand-red/10 px-3 py-2 text-sm text-brand-red">{error}</p> : null}
       <div className="grid gap-3 sm:grid-cols-2">
         <select className="input" name="priority" value={form.priority} onChange={handleChange}>
           <option value="low">Prioridad baja</option>
