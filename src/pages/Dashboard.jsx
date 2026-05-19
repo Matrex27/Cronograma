@@ -180,16 +180,16 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-brand-surface">
       <Navbar />
       <main className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[320px_1fr]">
         <aside className="space-y-4">
           <DateSelector value={selectedDate} onChange={setSelectedDate} />
 
           <div className="card space-y-3">
-            <h2 className="text-base font-semibold text-slate-900">Acciones rápidas</h2>
+            <h2 className="text-base font-semibold text-brand-ink">Acciones rápidas</h2>
             <button
-              className="btn w-full bg-blue-600 text-white hover:bg-blue-700"
+              className="btn w-full bg-brand-blue text-white hover:bg-brand-blueDark"
               type="button"
               onClick={() => {
                 setEditingTask(null);
@@ -199,7 +199,7 @@ function Dashboard() {
               {showTaskForm && !editingTask ? "Cerrar formulario tarea" : "Crear tarea"}
             </button>
             <button
-              className="btn w-full bg-emerald-600 text-white hover:bg-emerald-700"
+              className="btn w-full bg-brand-gold text-white hover:bg-brand-blueDark"
               type="button"
               onClick={() => {
                 setEditingEvent(null);
@@ -232,11 +232,11 @@ function Dashboard() {
         </aside>
 
         <section className="space-y-4">
-          {error ? <p className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p> : null}
+          {error ? <p className="rounded-lg bg-brand-red/10 px-4 py-3 text-sm text-brand-red">{error}</p> : null}
 
           <div className="card">
             <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900">Agenda diaria</h2>
+              <h2 className="text-lg font-semibold text-brand-ink">Agenda diaria</h2>
               <span className="text-sm text-slate-500">{selectedDate}</span>
             </div>
 
@@ -251,12 +251,12 @@ function Dashboard() {
                     key={item.id}
                     className={`rounded-xl border p-3 ${
                       item.type === "task"
-                        ? "border-blue-200 bg-blue-50"
-                        : "border-emerald-200 bg-emerald-50"
+                        ? "border-brand-blue/25 bg-brand-blue/10"
+                        : "border-brand-gold/30 bg-brand-gold/10"
                     }`}
                   >
                     <div className="mb-1 flex items-center justify-between">
-                      <p className="font-medium text-slate-900">{item.title}</p>
+                      <p className="font-medium text-brand-ink">{item.title}</p>
                       <span className="text-xs font-semibold uppercase tracking-wide text-slate-600">
                         {item.type === "task" ? "Tarea" : "Evento"}
                       </span>
@@ -274,7 +274,7 @@ function Dashboard() {
           <div className="grid gap-4 xl:grid-cols-2">
             <section className="space-y-3">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-slate-900">Tareas del día</h2>
+                <h2 className="text-lg font-semibold text-brand-ink">Tareas del día</h2>
                 <span className="text-sm text-slate-500">{tasks.length}</span>
               </div>
               {tasks.length === 0 ? (
@@ -299,7 +299,7 @@ function Dashboard() {
 
             <section className="space-y-3">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-slate-900">Eventos del día</h2>
+                <h2 className="text-lg font-semibold text-brand-ink">Eventos del día</h2>
                 <span className="text-sm text-slate-500">{events.length}</span>
               </div>
               {events.length === 0 ? (

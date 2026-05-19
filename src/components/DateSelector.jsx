@@ -1,7 +1,7 @@
 function DateSelector({ value, onChange }) {
   return (
     <div className="card">
-      <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="date-selector">
+      <label className="mb-2 block text-sm font-medium text-brand-ink" htmlFor="date-selector">
         Fecha del día
       </label>
       <input

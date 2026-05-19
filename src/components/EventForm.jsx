@@ -38,7 +38,7 @@ function EventForm({ initialData, defaultDate, onSubmit, onCancel, submitting })
 
   return (
     <form onSubmit={handleSubmit} className="card space-y-3">
-      <h3 className="text-base font-semibold text-slate-800">
+      <h3 className="text-base font-semibold text-brand-ink">
         {initialData ? "Editar evento" : "Nuevo evento"}
       </h3>
 
@@ -63,7 +63,7 @@ function EventForm({ initialData, defaultDate, onSubmit, onCancel, submitting })
         <button type="button" className="btn border border-slate-300 text-slate-700 hover:bg-slate-100" onClick={onCancel}>
           Cancelar
         </button>
-        <button type="submit" className="btn bg-emerald-600 text-white hover:bg-emerald-700" disabled={submitting}>
+        <button type="submit" className="btn bg-brand-gold text-white hover:bg-brand-blueDark" disabled={submitting}>
           {submitting ? "Guardando..." : initialData ? "Actualizar evento" : "Crear evento"}
         </button>
       </div>
